@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="chapter2.cpp" />
     <ClCompile Include="My first program.cpp" />
   </ItemGroup>
   <ItemGroup>
