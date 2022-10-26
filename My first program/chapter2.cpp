@@ -1,4 +1,4 @@
-#include <iostream>
+// #include <iostream>
 
 /* 참조자의 도입 
 int change_val(int *p) {
@@ -92,7 +92,7 @@ int main() {
 }
 */
 
-/* 외부 변수의 레퍼런스를 리턴 */
+/* 외부 변수의 레퍼런스를 리턴
 int& function(int& a) {
 	a = 5;
 	return a;
@@ -102,3 +102,17 @@ int main() {
 	int c = function(b);
 	return 0;
 }
+ */
+
+/* 참조자가 아닌 값을 리턴하는 함수를 참조자로 받기
+int function() {
+	int a = 5;
+	return a;
+}
+
+int main() {
+	const int& c = function();
+	std::cout << "c: " << c << std::endl;
+	return 0;
+}
+*/
