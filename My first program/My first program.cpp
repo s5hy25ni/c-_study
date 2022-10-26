@@ -1,7 +1,7 @@
 ﻿// My first program.cpp : 이 파일에는 'main' 함수가 포함됩니다. 거기서 프로그램 실행이 시작되고 종료됩니다.
 //
 
-#include <iostream>
+// #include <iostream>
 // #include "header1.h"
 // #include "header2.h"
 
@@ -14,14 +14,73 @@
 
 // using namespace header1;
 
-int main() {
-	int i;
+// int main() {
+	/* for문 예제
+	int sum = 0;
 
-	for (i = 0; i < 10; i++) {
-		std::cout << i << std::endl;
+	for (int i = 1; i <= 10; i++) {
+		sum += i;
 	}
 
-}
+	std::cout << "합은 : " << sum << std::endl;
+	*/
+
+	/* while문 예제 
+	int i = 1, sum = 0;
+	
+	while (i <= 10) {
+		sum += i;
+		i++;
+	}
+
+	std::cout << "합은 : " << sum << std::endl;
+	*/
+
+	/* if - else문 
+
+	int lucky_number = 3;
+	std::cout << "비밀 숫자를 맞춰 보세요!" << std::endl;
+
+	int user_input;
+
+	while (1) {
+		std::cout << "입력 : ";
+		std::cin >> user_input;
+		if (lucky_number == user_input) {
+			std::cout << "정답입니다!" << std::endl;
+			break;
+		}
+		else {
+			std::cout << "오답입니다, 다시 생각해보세요!" << std::endl;
+		}
+	*/
+
+	/* switch문 
+
+	int user_input;
+	std::cout << "어떤 정보가 궁금하신가요?" << std::endl;
+	std::cout << "1. 이름 " << std::endl;
+	std::cout << "2. 나이 " << std::endl;
+	std::cout << "3. 성별 " << std::endl;
+	std::cin >> user_input;
+
+	switch (user_input) {
+		case 1:
+			std::cout << "s5hy25ni" << std::endl;
+			break;
+		case 2:
+			std::cout << "27살" << std::endl;
+			break;
+		case 3:
+			std::cout << "여자" << std::endl;
+			break;
+		default:
+			std::cout << "1~3번을 입력하세요." << std::endl;
+			break;
+	}
+	*/
+
+//}
 
 
 // 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴
