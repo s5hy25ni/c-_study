@@ -1,7 +1,12 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\My first program",
+    "\\My first program\\x64",
+    "\\My first program\\x64\\Debug",
+    "\\My first program\\x64\\Debug\\My first program.tlog",
+    "\\x64"
   ],
-  "SelectedNode": "\\My first program.sln",
+  "SelectedNode": "\\My first program\\x64\\Debug\\My first program.tlog\\link.read.1.tlog",
   "PreviewInSolutionExplorer": false
 }
