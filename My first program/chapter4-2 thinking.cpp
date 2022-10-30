@@ -1,3 +1,5 @@
+/*
+
 class Point { // 점에 관한 정보
 	int x, y;
 
@@ -30,3 +32,5 @@ class Geometry { // 점들을 가지고 연산
 		Point* point_array[100];
 		int num_points;	
 };
+
+*/
