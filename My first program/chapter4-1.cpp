@@ -35,7 +35,7 @@ int main() {
 }
 */
 
-/* think  */
+/* think  
 
 int input_year, input_month, input_day, select_num;
 
@@ -156,16 +156,7 @@ class Date {
 	int cal_day;
 	int cal_end;
 
-public:
-	void SetDate(int year, int month, int day) {
-		year_ = year;
-		month_ = month;
-		day_ = day;
-	};
-	void AddDay(int inc) {
-		AddYear(inc / 365);
-		inc %= 365;
-		cal_day = day_ + inc;
+	void cheak_month(int inc) {
 		for (;;) {
 			cal_end = 1;
 			switch (month_) {
@@ -216,6 +207,40 @@ public:
 				break;
 			}
 			if (cal_end) break;
+		}
+	}
+
+public:
+	void SetDate(int year, int month, int day) {
+		year_ = year;
+		month_ = month;
+		day_ = day;
+	};
+	void AddDay(int inc) {
+		cal_day = day_ + inc;
+		for (;;) {
+			if (cheak_leap(year_)) {
+				if (cal_day > 366) {
+					AddYear(1);
+					cal_day -= 366;
+					continue;
+				}
+				else {
+					cheak_month(cal_day);
+					break;
+				}
+			}
+			else {
+				if (cal_day > 365) {
+					AddYear(1);
+					cal_day -= 365;
+					continue;
+				}
+				else {
+					cheak_month(cal_day);
+					break;
+				}
+			}
 		}
 	};
 	void AddMonth(int inc) {
@@ -340,3 +365,4 @@ int main() {
 	}
 }
 
+*/
