@@ -1,6 +1,2 @@
 ﻿  chapter5-1.cpp
-C:\Users\SoHyeon\source\repos\My first program\My first program\chapter5-1.cpp(136): warning C4172: 지역 변수 또는 임시: temp의 주소를 반환하고 있습니다.
-C:\Users\SoHyeon\source\repos\My first program\My first program\chapter5-1.cpp(142): warning C4172: 지역 변수 또는 임시: temp의 주소를 반환하고 있습니다.
-C:\Users\SoHyeon\source\repos\My first program\My first program\chapter5-1.cpp(131): warning C4172: 지역 변수 또는 임시: temp의 주소를 반환하고 있습니다.
-C:\Users\SoHyeon\source\repos\My first program\My first program\chapter5-1.cpp(150): warning C4172: 지역 변수 또는 임시: temp의 주소를 반환하고 있습니다.
   My first program.vcxproj -> C:\Users\SoHyeon\source\repos\My first program\x64\Debug\My first program.exe
