@@ -114,37 +114,41 @@
 class Complex {
 private:
 	double real, img;
+	double get_number(const char* str, int from, int to) const;
 
 public:
 	Complex(double real, double img) : real(real), img(img) {}
+	Complex(const Complex& c) { real = c.real, img = c.img; }
+	Complex(const char* str);
 	
 	Complex operator+(const Complex& c) const;
-	Complex operator+(const char* str);
 	Complex operator-(const Complex& c) const;
 	Complex operator*(const Complex& c) const;
 	Complex operator/(const Complex& c) const;
 
-	Complex& operator=(const Complex& c);
+	Complex operator+(const char* str) const;
+	Complex operator-(const char* str) const;
+	Complex operator*(const char* str) const;
+	Complex operator/(const char* str) const;
+
 	Complex& operator+=(const Complex& c);
 	Complex& operator-=(const Complex& c);
 	Complex& operator*=(const Complex& c);
 	Complex& operator/=(const Complex& c);
 
+	Complex& operator=(const Complex& c);
+
 	void println() { std::cout << "( " << real << " , " << img << " ) " << std::endl; }
 };
 
-Complex Complex::operator+(const Complex& c) const {
-	Complex temp(real + c.real, img + c.img);
-	return temp;
-}
-
-Complex Complex::operator+(const char* str) {
+Complex::Complex(const char* str) {
 	// 입력 받은 문자열을 분석하여 real 부분과 img 부분을 찾음
 	// 문자열의 꼴은 (부호) (실수부) (부호) i (허수부)
 	// 부호는 생략 가능 => 생략시 +
 
 	int begin = 0, end = strlen(str);
-	double str_img = 0.0, str_real = 0.0;
+	img = 0.0;
+	real = 0.0;
 
 	// 먼저 가장 기준이 되는 'i'의 위치를 찾음
 	int pos_i = -1;
@@ -157,19 +161,51 @@ Complex Complex::operator+(const char* str) {
 
 	// 만약 'i'가 없다면 이 수는 실수 뿐
 	if (pos_i == -1) {
-		str_real = get_number(str, begin, end - 1);
-		Complex temp(str_real, str_img);
-		return (*this) + temp;
+		real = get_number(str, begin, end - 1);
+		return;
 	}
 
 	// 만일 'i'가 있다면, 실수부와 허수부를 나누어서 처리
-	str_real = get_number(str, begin, pos_i - 1);
-	str_img = get_number(str, pos_i, end - 1);
+	real = get_number(str, begin, pos_i - 1);
+	img = get_number(str, pos_i + 1, end - 1);
 
-	if (pos_i >= 1 && str[pos_i - 1] == '-') str_img *= -1.0;
+	if (pos_i >= 1 && str[pos_i - 1] == '-') img *= -1.0;
+}
 
-	Complex temp(str_real, str_img);
-	return (*this) + temp;
+double Complex::get_number(const char* str, int from, int to) const {
+	bool minus = false;
+	if (from > to) return 0;
+
+	if (str[from] == '-') minus = true;
+	if (str[from] == '-' || str[from] == '+') from++;
+
+	double num = 0.0;
+	double decimal = 1.0;
+
+	bool integer_part = true;
+	for (int i = from; i <= to; i++) {
+		if (isdigit(str[i]) && integer_part) {
+			num *= 10.0;
+			num += (str[i] - '0');
+		}
+		else if (str[i] == '.') {
+			integer_part = false;
+		}
+		else if (isdigit(str[i]) && !integer_part) {
+			decimal /= 10.0;
+			num += ((str[i] - '0') * decimal);
+		}
+		else break; // 그 외 이상한 문자들이 올 경우
+	}
+
+	if (minus) num *= -1.0;
+
+	return num;
+};
+
+Complex Complex::operator+(const Complex& c) const {
+	Complex temp(real + c.real, img + c.img);
+	return temp;
 }
 
 Complex Complex::operator-(const Complex& c) const {
@@ -190,11 +226,24 @@ Complex Complex::operator/(const Complex& c) const {
 	return temp;
 }
 
-Complex& Complex::operator=(const Complex& c) {
-	real = c.real;
-	img = c.img;
+Complex Complex::operator+(const char* str) const {
+	Complex temp(str);
+	return (*this) + temp;
+}
 
-	return *this;
+Complex Complex::operator-(const char* str) const {
+	Complex temp(str);
+	return (*this) - temp;
+}
+
+Complex Complex::operator*(const char* str) const {
+	Complex temp(str);
+	return (*this) * temp;
+}
+
+Complex Complex::operator/(const char* str) const {
+	Complex temp(str);
+	return (*this) / temp;
 }
 
 Complex& Complex::operator+=(const Complex& c) {
@@ -217,20 +266,21 @@ Complex& Complex::operator/=(const Complex& c) {
 	return *this;
 }
 
-int main() {
-	Complex a(1.0, 2.0);
-	Complex b(3.0, -2.0);
-	Complex c(0.0, 0.0);
+Complex& Complex::operator=(const Complex& c) {
+	real = c.real;
+	img = c.img;
 
-	a.println();
-	b.println();
-	c.println();
-
-	c = a * b + a / b + a + b;
-	a += b;
-
-	a.println();
-	b.println();
-	c.println();
-
+	return *this;
 }
+
+int main() {
+	Complex a(0, 0);
+	a = a + "-1.1 + i3.923";
+	a.println();
+	a = a - "1.2 - i1.823";
+	a.println();
+	a = a * "2.3 + i22";
+	a.println();
+	a = a / "-12 + i55";
+	a.println();
+};
