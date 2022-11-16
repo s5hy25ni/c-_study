@@ -128,8 +128,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="chapter4-1 thinking.cpp" />
-    <ClCompile Include="chapter4-2 thinking2.cpp" />
     <ClCompile Include="chapter4-2 thinking1.cpp" />
+    <ClCompile Include="chapter4-2thinking2.cpp" />
     <ClCompile Include="chapter4-2.cpp" />
     <ClCompile Include="chapter2.cpp" />
     <ClCompile Include="chapter3.cpp" />
