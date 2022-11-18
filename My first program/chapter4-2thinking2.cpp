@@ -19,9 +19,10 @@ class Geometry {
 public:
     Geometry() : num_points(0) {}
     ~Geometry() {
+        std::cout << std::endl << "<========== 프로그램 종료 ==========>" << std::endl;
         for (int i = 0; i < num_points; i++) {
             if (point_array[i] != nullptr) {
-                std::cout << i << "가 삭제됨" << std::endl;
+                std::cout << "point_array[" << i << "]가 삭제됨" << std::endl;
                 delete point_array[i];
             }
             else {
@@ -38,6 +39,8 @@ public:
     // 모든 점들 간의 거리를 출력하는 함수 입니다.
     void PrintDistance() 
     {
+        std::cout << std::endl << "<=========== 모든 점들 간의 거리를 출력 ==========>" << std::endl;
+        std::cout << std::endl << "num_points : " << num_points << std::endl << std::endl;
         if (num_points > 1) 
         {
             for (int i = 0; i < num_points-1; i++) 
@@ -49,13 +52,13 @@ public:
                     int x2 = point_array[j]->getX();
                     int y2 = point_array[j]->getY();
                     double result = sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-                    std::cout << "Point( " << x1 << ", " << y1 << " )과 Point( " << x2 << ", " << y2 << " )의 거리 : " << result << std::endl;
+                    std::cout << "Point( " << x1 << ", " << y1 << " )와 Point( " << x2 << ", " << y2 << " )의 거리 : " << result << std::endl;
                 }
             }
         }
         else
         {
-            std::cout << "점이 1개밖에 없어용. 더 추가해주세용." << std::endl;
+            std::cout << "점이 1개 이하에용~ 더 추가해주세용 :)" << std::endl;
         }
     };
 
@@ -65,29 +68,62 @@ public:
     // 서로 다른 부분에 있을 조건은 f(x1, y1) * f(x2, y2) <= 0 이면 됩니다.
         void PrintNumMeets()
         {
+            std::cout << std::endl << "<========== 모든 점들을 잇는 직선들 간의 교점의 수 출력 ==========>" << std::endl;
+
+            int a1, a2, b1, b2, c1, c2 = 0;
+            int lineTotal = 1;
+
+            for (; lineTotal < num_points; lineTotal++) {
+                lineTotal *= lineTotal;
+            }
+
+            int* aArray = new int[lineTotal];
+            int* bArray = new int[lineTotal];
+            int* cArray = new int[lineTotal];
+            int lineNum = 0;
+
             if (num_points > 2)
-            {   
-                int numMeets = 0;
-                for (int i = 0; i < num_points-2; i++)
+            {
+                // 일단 직선의 방정식
+                for (int i = 0; i < num_points - 2; i++) 
                 {
                     int x1 = point_array[i]->getX();
                     int y1 = point_array[i]->getY();
-                    for (int j = i + 1; j < num_points-1; j++)
+                    for (int j = i + 1; j < num_points - 1; j++)
                     {
                         int x2 = point_array[j]->getX();
                         int y2 = point_array[j]->getY();
-                        for (int k = j + 1; k < num_points; k++)
-                        {
-                            int x3 = point_array[k]->getX();
-                            int y3 = point_array[k]->getY();
+                        
+                        a1 = y2 - y1;
+                        b1 = -(x2 - x1);
+                        c1 = (-b1 * y1) - (a1 * x1);
+
+                        std::cout << "Point( " << x1 << ", " << y1 << " )과 Point( " << x2 << ", " << y2 << " )를 지나는 직선의 방정식 : " << a1 << "x + " << b1 << "y + " << c1 << std::endl;                        
+                        
+                        for (int m = j + 1; m < num_points; m++) {
+                            int x3 = point_array[m]->getX();
+                            int y3 = point_array[m]->getY();
+
+                            for (int n = 0; n < m; n++) {
+                                int x4 = point_array[n]->getX();
+                                int y4 = point_array[n]->getY();
+
+                                a2 = y4 - y3;
+                                b2 = -(x4 - x3);
+                                c2 = (-b2 * y3) - (a2 * x3);
+                            }
                         }
                     }
                 }
             }
             else
             {
-                std::cout << "점이 2개밖에 없어용. 더 추가해주세용." << std::endl;
+                std::cout << "점이 2개 이하에용~ 더 추가해주세용 :)" << std::endl;
             }
+
+            delete[] aArray;
+            delete[] bArray;
+            delete[] cArray;
         }
 
 
@@ -97,10 +133,13 @@ public:
 int main() {
     Point x = Point(1, 2);
     Point y = Point(8, 11);
-    Point z = Point(2, 5);
+    Point z = Point(5, 4);
+    Point k = Point(5, 7);
     Geometry g = Geometry();
     g.AddPoint(x);
     g.AddPoint(y);
     g.AddPoint(z);
+    g.AddPoint(k);
     g.PrintDistance();
+    g.PrintNumMeets();
 }
