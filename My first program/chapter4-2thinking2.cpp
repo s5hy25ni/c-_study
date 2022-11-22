@@ -98,6 +98,11 @@ public:
                         b1 = -(x2 - x1);
                         c1 = (-b1 * y1) - (a1 * x1);
 
+                        for (int k = 0; k < lineNum; k++) {
+                            if (aArray[k] != a1 || bArray[k] != b1 || cArray[k] != c1) continue;
+                            else break;
+                        }
+
                         std::cout << "Point( " << x1 << ", " << y1 << " )과 Point( " << x2 << ", " << y2 << " )를 지나는 직선의 방정식 : " << a1 << "x + " << b1 << "y + " << c1 << std::endl;                        
                         
                         for (int m = j + 1; m < num_points; m++) {
@@ -111,6 +116,8 @@ public:
                                 a2 = y4 - y3;
                                 b2 = -(x4 - x3);
                                 c2 = (-b2 * y3) - (a2 * x3);
+
+                                for (int k =0; k < lineNume2)
                             }
                         }
                     }
