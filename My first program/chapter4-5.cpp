@@ -47,6 +47,7 @@
 //
 //mystring::mystring(char c) {
 //	string_content = new char[1];
+//	std::cout << string_content << std::endl;
 //	string_content[0] = c;
 //	memory_capacity = 1;
 //	string_length = 1;
@@ -60,6 +61,7 @@
 //	for (int i = 0; i != string_length; i++) {
 //		string_content[i] = str[i];
 //	}
+//	std::cout << string_content << std::endl;
 //}
 //
 //mystring::mystring(const mystring& str) {
@@ -70,6 +72,7 @@
 //	for (int i = 0; i != string_length; i++) {
 //		string_content[i] = str.string_content[i];
 //	}
+//	std::cout << string_content << std::endl;
 //}
 //
 //mystring::~mystring() { delete[] string_content; }
@@ -282,33 +285,36 @@
 //}
 //
 //int main() {
-//	mystring str1("very very very long stirng");
-//	mystring str2("<some string inserted between>");
-//	str1.reserve(30);
+//	mystring str1("v");
+//	mystring str2("hello");
+//	mystring str3(str2);
+//	//mystring str1("very very very long stirng");
+//	//mystring str2("<some string inserted between>");
+//	//str1.reserve(30);
 //
-//	std::cout << "capacity : " << str1.capacity() << std::endl;
-//	std::cout << "string length : " << str1.length() << std::endl;
-//	str1.println();
-//	std::cout << std::endl;
+//	//std::cout << "capacity : " << str1.capacity() << std::endl;
+//	//std::cout << "string length : " << str1.length() << std::endl;
+//	//str1.println();
+//	//std::cout << std::endl;
 //
-//	str1.insert(5, str2);
-//	std::cout << "capacity : " << str1.capacity() << std::endl;
-//	std::cout << "string length : " << str1.length() << std::endl;
-//	str1.println();
-//	std::cout << std::endl;
+//	//str1.insert(5, str2);
+//	//std::cout << "capacity : " << str1.capacity() << std::endl;
+//	//std::cout << "string length : " << str1.length() << std::endl;
+//	//str1.println();
+//	//std::cout << std::endl;
 //
-//	mystring str3("this is a very very long string");
-//	std::cout << "location of first <very> in the stirng : " << str3.find(0, "very") << std::endl;
-//	std::cout << "location of second <very> in the string : " << str3.find(str3.find(0, "very") + 1, "very") << std::endl;
+//	//mystring str3("this is a very very long string");
+//	//std::cout << "location of first <very> in the stirng : " << str3.find(0, "very") << std::endl;
+//	//std::cout << "location of second <very> in the string : " << str3.find(str3.find(0, "very") + 1, "very") << std::endl;
 //
-//	mystring str4("abc");
-//	mystring str5("abc");
+//	//mystring str4("abc");
+//	//mystring str5("abc");
 //
-//	std::cout << "compare : " << str4.compare(str5) << std::endl;
+//	//std::cout << "compare : " << str4.compare(str5) << std::endl;
 //
-//	str5.erase(2, 4);
-//	std::cout << "capacity : " << str5.capacity() << std::endl;
-//	std::cout << "string length : " << str5.length() << std::endl;
-//	str5.println();
+//	//str5.erase(2, 4);
+//	//std::cout << "capacity : " << str5.capacity() << std::endl;
+//	//std::cout << "string length : " << str5.length() << std::endl;
+//	//str5.println();
 //
 //}
