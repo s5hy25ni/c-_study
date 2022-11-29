@@ -8,20 +8,27 @@ public:
 	int len;
 
 	string(char c, int n) { // 문자 c 가 n 개 있는 문자열로 정의
-		len = n;
+		len = n+1;
 		str = new char[len];
 		for (int i = 0; i < len; i++) {
-			str[i] = c;
+			if (i < len - 1) {
+				str[i] = c;
+			}
+			else str[i] = '\0';
 		}
+		
 	};  
-	string(const char* s) {
+	string(const char* s) { // hello
+		len = 0;
 		while (true) {
-			if (*s == '\0') break;
-			else len++; s++;
+			len++;
+			if (s[len] == '\0') {
+				break;
+			}
 		}
 		str = new char[len];
 		for (int i = 0; i < len; i++) {
-			str[i] = s[i];
+			str[i] = s[i-len];
 		}
 	};
 	string(const string& s) {
@@ -55,7 +62,9 @@ int main() {
 	string b = "hello";
 	string c = a;
 
-	a.add_string(b);
+	//a.add_string(b);
 	std::cout << a.str << std::endl;
 	std::cout << a.len << std::endl;
+	std::cout << b.str << std::endl;
+	std::cout << b.len << std::endl;
 }
