@@ -8,15 +8,14 @@ public:
 	int len;
 
 	string(char c, int n) { // 문자 c 가 n 개 있는 문자열로 정의
-		len = n+1;
+		len = n;
 		str = new char[len];
-		for (int i = 0; i < len; i++) {
-			if (i < len - 1) {
+		for (int i = 0; i <= len; i++) {
+			if (i < len) {
 				str[i] = c;
 			}
 			else str[i] = '\0';
 		}
-		
 	};  
 	string(const char* s) { // hello
 		len = 0;
