@@ -60,6 +60,9 @@
     <ClCompile Include="chapter4-2 thinking2.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="chapter4-5 thinking2.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header1.h">

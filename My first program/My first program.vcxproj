@@ -137,6 +137,7 @@
     <ClCompile Include="chapter4-3 thinking.cpp" />
     <ClCompile Include="chapter4-3.cpp" />
     <ClCompile Include="chapter4-4.cpp" />
+    <ClCompile Include="chapter4-5 thinking2.cpp" />
     <ClCompile Include="chapter4-5.cpp" />
     <ClCompile Include="chapter4-6.cpp" />
     <ClCompile Include="chapter5-1.cpp" />
