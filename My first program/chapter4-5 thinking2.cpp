@@ -46,19 +46,23 @@ public:
 		if (len < s.len) { std::cout << "검색 대상보다 짧게 입력" << std::endl; }
 		else {
 			int find_num = s.len - 1;
+			int not_same = 0;
+			for (int i = find_num; i > find_num-s.len; i--) {
+				if (str[i] == s.str[i]) {
+					std::cout << i << "번째 글자 일치" << std::endl;
+				}
+				else {
+					std::cout << i << "번째 글자 불일치" << std::endl;
+				}
+			}
 
 		}
 	}
 };
 
 int main() {
-	string a = "a";
-	string b = "d";
+	string a = "hello, sohyeon!";
+	string b = "soh"; 
 
-	std::cout << a.str[0] << std::endl;
-	std::cout << b.str[0] << std::endl;
-
-	if (a.str[0] == b.str[0]) { std::cout << "일치" << std::endl; }
-	else { std::cout << "불일치" << std::endl; }
-
+	a.find(b);
 }
