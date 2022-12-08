@@ -46,7 +46,7 @@ public:
 		if (len < s.len) { std::cout << "검색 대상보다 짧게 입력" << std::endl; }
 		else {
 			int find_num = s.len - 1;
-			int not_same = 0;
+			int same = 0;
 			for (int i = find_num; i > find_num-s.len; i--) {
 				if (str[i] == s.str[i]) {
 					std::cout << i << "번째 글자 일치" << std::endl;
