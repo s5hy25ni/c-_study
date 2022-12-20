@@ -143,6 +143,7 @@
     <ClCompile Include="chapter5-1 thinking1.cpp" />
     <ClCompile Include="chapter5-1.cpp" />
     <ClCompile Include="chapter5-2.cpp" />
+    <ClCompile Include="chapter5-3.cpp" />
     <ClCompile Include="My first program.cpp" />
   </ItemGroup>
   <ItemGroup>
