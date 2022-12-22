@@ -5,6 +5,8 @@ namespace MyArray {
     class Int;
 
     class Array {
+
+        // friend 로 선언된 다른 class의 private 및 protected 멤버에 접근 가능
         friend Int;
 
         const int dim;  // 몇 차원 배열 인지
