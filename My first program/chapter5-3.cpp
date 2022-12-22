@@ -1,82 +1,249 @@
-class Array {
-	const int dim; // 몇 차원 배열인지 -> Array의 차원을 정하면 변경할 수 없음
-	int* size; // size[0] * size[1] * ... * size[dim-1] 짜리 배열
+#include <iostream>
 
-	struct Address {
-		int level;
-		// 맨 마지막 레벨(dim-1 레벨)은 데이터 배열을 가리키고,
-		// 그 위 상위 레벨에서는 다음 Address 배열을 가리킨다.
-		void* next;
-	};
+namespace MyArray {
+    class Array;
+    class Int;
 
-	Address* top;
+    class Array {
+        friend Int;
 
-	void initialize_address(Address* current) {
-		if (!current) return; // current 가 NULL 일 때 예외적으로 처리
-		if (current->level == dim - 1) { // 재귀 호출 종료 조건 :  Address 배열의 레벨이 (dim - 1)인 경우
-			current->next = new int[size[current->level]]; // (dim-1) 레벨의 Address 들의 next에는 int 배열의 데이터가 들어감
-			return;
-		}
-		current->next = new Address[size[current->level]];
-		for(int i = 0; i != size[current->level]; i++) {// 재귀 호출이 다음 단계로 넘어가는 과정
-			// (static_cast<Address *>(current->next) + i) : current->next 를 시작 주소로 하는 Address 배열의 i 번째 원소를 가리키는 포인터
-			(static_cast<Address*>(current->next) + 1)->level = current->level + 1;
+        const int dim;  // 몇 차원 배열 인지
+        int* size;  // size[0] * size[1] * ... * size[dim - 1] 짜리 배열이다.
 
-			initialize_address(static_cast<Address*>(current->next) + i);
-		}
-	}
+        struct Address {
+            int level;
+            // 맨 마지막 레벨(dim - 1 레벨) 은 데이터 배열을 가리키고, 그 위 상위
+            // 레벨에서는 다음 Address 배열을 가리킨다.
+            void* next;
+        };
 
-	void delete_address(Address* current) {
-		if (!current) return;
-		for (int i = 0; current->level < dim - 1 && i < size[current->level]; i++) {
-			delete_address(static_cast<Address*>(current->next) + i);
-		}
+        Address* top;
 
-		if (current->level == dim - 1) {
-			delete[] static_cast<int*>(current->next);
-		}
+    public:
+        class Iterator {
+            int* location;
+            Array* arr;
 
-		delete[] static_cast<Address*>(current->next);
-	}
+            friend Int;
 
-public:
-	Array(int dim, int* array_size) : dim(dim) {
-		size = new int[dim];
-		for (int i = 0; i < dim; i++) size[i] = array_size[i];
+        public:
+            Iterator(Array* arr, int* loc = NULL) : arr(arr) {
+                location = new int[arr->dim];
+                for (int i = 0; i != arr->dim; i++)
+                    location[i] = (loc != NULL ? loc[i] : 0);
+            }
+            Iterator(const Iterator& itr) : arr(itr.arr) {
+                location = new int[arr->dim];
+                for (int i = 0; i != arr->dim; i++) location[i] = itr.location[i];
+            }
+            ~Iterator() { delete[] location; }
+            // 다음 원소를 가리키게 된다.
+            Iterator& operator++() {
+                if (location[0] >= arr->size[0]) return (*this);
 
-		top = new Address;
-		top->level = 0;
+                bool carry = false;  // 받아 올림이 있는지
+                int i = arr->dim - 1;
+                do {
+                    // 어차피 다시 돌아온다는 것은 carry 가 true
+                    // 라는 의미 이므로 ++ 을 해야 한다.
+                    location[i]++;
+                    if (location[i] >= arr->size[i] && i >= 1) {
+                        // i 가 0 일 경우 0 으로 만들지 않는다 (이러면 begin 과 중복됨)
+                        location[i] -= arr->size[i];
+                        carry = true;
+                        i--;
+                    }
+                    else
+                        carry = false;
 
-		initialize_address(top);
-	}
+                } while (i >= 0 && carry);
 
-	Array(const Array& arr) : dim(arr.dim) {
-		size = new int[dim];
-		for (int i = 0; i < dim; i++) size[i] == arr.size[i];
+                return (*this);
+            }
+            Iterator& operator=(const Iterator& itr) {
+                arr = itr.arr;
+                location = new int[itr.arr->dim];
+                for (int i = 0; i != arr->dim; i++) location[i] = itr.location[i];
 
-		top = new Address;
-		top->level = 0;
+                return (*this);
+            }
+            Iterator operator++(int) {
+                Iterator itr(*this);
+                ++(*this);
+                return itr;
+            }
+            bool operator!=(const Iterator& itr) {
+                if (itr.arr->dim != arr->dim) return true;
 
-		initialize_address(top);
+                for (int i = 0; i != arr->dim; i++) {
+                    if (itr.location[i] != location[i]) return true;
+                }
 
-		// 내용물 복사
-		copy_address(top, arr.top);
-	}
+                return false;
+            }
+            Int operator*();
+        };
 
-	void copy_address(Address* dst, Address* src) {
-		if (dst->level == dim - 1) {
-			for (int i = 0; i < size[dst->level]; ++i)
-				static_cast<int*>(dst->next)[i] = static_cast<int*>(src->next)[i];
-			return;
-		}
-		for (int i = 0; i != size[dst->level]; i++) {
-			Address* new_dst = static_cast<Address*>(dst->next) + i;
-			Address* new_src = static_cast<Address*>(src->next) + i;
-			copy_address(new_dst, new_src);
-		}
-	}
-	~Array() {
-		delete_address(top);
-		delete[] size;
-	}
-};
+        friend Iterator;
+        Array(int dim, int* array_size) : dim(dim) {
+            size = new int[dim];
+            for (int i = 0; i < dim; i++) size[i] = array_size[i];
+
+            top = new Address;
+            top->level = 0;
+
+            initialize_address(top);
+        }
+        Array(const Array& arr) : dim(arr.dim) {
+            size = new int[dim];
+            for (int i = 0; i < dim; i++) size[i] = arr.size[i];
+
+            top = new Address;
+            top->level = 0;
+
+            initialize_address(top);
+            // 내용물 복사
+            copy_address(top, arr.top);
+        }
+
+        void copy_address(Address* dst, Address* src) {
+            if (dst->level == dim - 1) {
+                for (int i = 0; i < size[dst->level]; ++i)
+                    static_cast<int*>(dst->next)[i] = static_cast<int*>(src->next)[i];
+                return;
+            }
+            for (int i = 0; i != size[dst->level]; i++) {
+                Address* new_dst = static_cast<Address*>(dst->next) + i;
+                Address* new_src = static_cast<Address*>(src->next) + i;
+                copy_address(new_dst, new_src);
+            }
+        }
+
+        // address 를 초기화 하는 함수이다. 재귀 호출로 구성되어 있다.
+        void initialize_address(Address* current) {
+            if (!current) return;
+            if (current->level == dim - 1) {
+                current->next = new int[size[current->level]];
+                return;
+            }
+            current->next = new Address[size[current->level]];
+            for (int i = 0; i != size[current->level]; i++) {
+                (static_cast<Address*>(current->next) + i)->level = current->level + 1;
+                initialize_address(static_cast<Address*>(current->next) + i);
+            }
+        }
+        void delete_address(Address* current) {
+            if (!current) return;
+            for (int i = 0; current->level < dim - 1 && i < size[current->level]; i++) {
+                delete_address(static_cast<Address*>(current->next) + i);
+            }
+
+            if (current->level == dim - 1) {
+                delete[] static_cast<int*>(current->next);
+            }
+            delete[] static_cast<Address*>(current->next);
+        }
+        Int operator[](const int index);
+        ~Array() {
+            delete_address(top);
+            delete[] size;
+        }
+
+        Iterator begin() {
+            int* arr = new int[dim];
+            for (int i = 0; i != dim; i++) arr[i] = 0;
+
+            Iterator temp(this, arr);
+            delete[] arr;
+
+            return temp;
+        }
+        Iterator end() {
+            int* arr = new int[dim];
+            arr[0] = size[0];
+            for (int i = 1; i < dim; i++) arr[i] = 0;
+
+            Iterator temp(this, arr);
+            delete[] arr;
+
+            return temp;
+        }
+    };
+    class Int {
+        void* data;
+
+        int level;
+        Array* array;
+
+    public:
+        Int(int index, int _level = 0, void* _data = NULL, Array* _array = NULL)
+            : level(_level), data(_data), array(_array) {
+            if (_level < 1 || index >= array->size[_level - 1]) {
+                data = NULL;
+                return;
+            }
+            if (level == array->dim) {
+                // 이제 data 에 우리의 int 자료형을 저장하도록 해야 한다.
+                data = static_cast<void*>((
+                    static_cast<int*>(static_cast<Array::Address*>(data)->next) + index));
+            }
+            else {
+                // 그렇지 않을 경우 data 에 그냥 다음 addr 을 넣어준다.
+                data = static_cast<void*>(static_cast<Array::Address*>(
+                    static_cast<Array::Address*>(data)->next) +
+                    index);
+            }
+        };
+
+        Int(const Int& i) : data(i.data), level(i.level), array(i.array) {}
+
+        operator int() {
+            if (data) return *static_cast<int*>(data);
+            return 0;
+        }
+        Int& operator=(const int& a) {
+            if (data) *static_cast<int*>(data) = a;
+            return *this;
+        }
+
+        Int operator[](const int index) {
+            if (!data) return 0;
+            return Int(index, level + 1, data, array);
+        }
+    };
+    Int Array::operator[](const int index) {
+        return Int(index, 1, static_cast<void*>(top), this);
+    }
+    Int Array::Iterator::operator*() {
+        Int start = arr->operator[](location[0]);
+        for (int i = 1; i <= arr->dim - 1; i++) {
+            start = start.operator[](location[i]);
+        }
+        return start;
+    }
+}  // namespace MyArray
+int main() {
+    int size[] = { 2, 3, 4 };
+    MyArray::Array arr(3, size);
+
+    MyArray::Array::Iterator itr = arr.begin();
+    for (int i = 0; itr != arr.end(); itr++, i++) (*itr) = i;
+    for (itr = arr.begin(); itr != arr.end(); itr++)
+        std::cout << *itr << std::endl;
+
+    for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < 3; j++) {
+            for (int k = 0; k < 4; k++) {
+                arr[i][j][k] = (i + 1) * (j + 1) * (k + 1) + arr[i][j][k];
+            }
+        }
+    }
+    for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < 3; j++) {
+            for (int k = 0; k < 4; k++) {
+                std::cout << i << " " << j << " " << k << " " << arr[i][j][k]
+                    << std::endl;
+            }
+        }
+    }
+}
